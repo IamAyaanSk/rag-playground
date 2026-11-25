@@ -5,6 +5,8 @@ load_dotenv()
 from langchain.chat_models import init_chat_model
 from rich import print as rprint
 
+from utils.embeddings import calculate_similarities, get_batch_embeddings, get_embedding
+
 # from langchain_text_splitters import RecursiveCharacterTextSplitter
 # from utils.document_loaders import load_pdf
 # from utils.document_parsers import parse_document_with_docling
@@ -84,6 +86,19 @@ def main():
     # parse_document_with_docling("reserach.pdf")
 
     rprint(split_text_recursively(SAMPLE_TEXT))
+
+    documents = [
+        "Delhi is the capital of India.",
+        "Mumbai is the financial capital of India.",
+        "RAG is used to make knowledge aware AI pipelines.",
+    ]
+
+    quer_vec = get_embedding("Whats the capital of India?")
+    docs_vec = get_batch_embeddings(docs=documents)
+
+    similarities = calculate_similarities(doc_vectors=docs_vec, query_vector=quer_vec)
+
+    rprint(list(zip(documents, similarities)))
 
 
 if __name__ == "__main__":
